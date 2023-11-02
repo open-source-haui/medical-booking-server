@@ -1,5 +1,4 @@
 const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const response = require('../utils/response');
 const { departmentService } = require('../services');
@@ -17,9 +16,6 @@ const getDepartments = catchAsync(async (req, res) => {
 
 const getDepartment = catchAsync(async (req, res) => {
   const department = await departmentService.getDepartmentById(req.params.departmentId);
-  if (!department) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Department not found');
-  }
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', department));
 });
 
