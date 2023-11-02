@@ -1,10 +1,13 @@
-const { Department } = require('../models');
+const { Department, Doctor } = require('../models');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 
 const createDepartment = async (departmentBody) => {
-  // check leader
+  const leader = await Doctor.findById(departmentBody.leader);
+  if (!leader) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+  }
   return Department.create(departmentBody);
 };
 
@@ -25,6 +28,10 @@ const getDepartmentById = async (departmentId) => {
 
 const updateDepartmentById = async (departmentId, updateBody) => {
   const department = await getDepartmentById(departmentId);
+  const leader = await Doctor.findById(updateBody.leader);
+  if (!leader) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+  }
   Object.assign(department, updateBody);
   await department.save();
   return department;
