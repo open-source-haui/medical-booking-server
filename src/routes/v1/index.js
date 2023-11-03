@@ -7,6 +7,7 @@ const authRoute = require('./auth.route');
 const doctorRoute = require('./doctor.route');
 const departmentRoute = require('./department.route');
 const workingPlanRoute = require('./workingPlan.route');
+const workingTimeRoute = require('./workingTime.route');
 
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/working-plans',
     route: workingPlanRoute,
+  },
+  {
+    path: '/working-times',
+    route: workingTimeRoute,
   },
 ];
 

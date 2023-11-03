@@ -8,3 +8,4 @@ module.exports.dataService = require('./data.service');
 module.exports.doctorService = require('./doctor.service');
 module.exports.departmentService = require('./department.service');
 module.exports.workingPlanService = require('./workingPlan.service');
+module.exports.workingTimeService = require('./workingTime.service');
