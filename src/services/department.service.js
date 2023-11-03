@@ -28,9 +28,11 @@ const getDepartmentById = async (departmentId) => {
 
 const updateDepartmentById = async (departmentId, updateBody) => {
   const department = await getDepartmentById(departmentId);
-  const leader = await Doctor.findById(updateBody.leader);
-  if (!leader) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+  if (updateBody.leader) {
+    const leader = await Doctor.findById(updateBody.leader);
+    if (!leader) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+    }
   }
   Object.assign(department, updateBody);
   await department.save();
