@@ -35,10 +35,22 @@ const deleteDoctorById = async (doctorId) => {
   return doctor;
 };
 
+const getWorkingTimesByDoctor = async (doctorId, date) => {
+  const workingPlan = await WorkingPlan.findOne({
+    doctor: doctorId,
+    date: new Date(date),
+  });
+  const workingTimes = await WorkingTime.find({
+    workingPlan: workingPlan?._id,
+  });
+  return workingTimes;
+};
+
 module.exports = {
   createDoctor,
   queryDoctors,
   getDoctorById,
   updateDoctorById,
   deleteDoctorById,
+  getWorkingTimesByDoctor,
 };

@@ -51,10 +51,20 @@ const deleteDoctor = {
   }),
 };
 
+const getWorkingTimesByDoctor = {
+  params: Joi.object().keys({
+    doctorId: Joi.string().required().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    date: Joi.date().required(),
+  }),
+};
+
 module.exports = {
   createDoctor,
   getDoctors,
   getDoctor,
   updateDoctor,
   deleteDoctor,
+  getWorkingTimesByDoctor,
 };

@@ -30,10 +30,16 @@ const deleteDoctor = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', doctor));
 });
 
+const getWorkingTimesByDoctor = catchAsync(async (req, res) => {
+  const workingTimes = await doctorService.getWorkingTimesByDoctor(req.params.doctorId, req.body.date);
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', workingTimes));
+});
+
 module.exports = {
   createDoctor,
   getDoctors,
   getDoctor,
   updateDoctor,
   deleteDoctor,
+  getWorkingTimesByDoctor,
 };

@@ -30,10 +30,17 @@ const deleteDepartment = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', department));
 });
 
+const getDoctorsByDepartment = catchAsync(async (req, res) => {
+  console.log(req.params.departmentId);
+  const doctors = await departmentService.getDoctorsByDepartment(req.params.departmentId);
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', doctors));
+});
+
 module.exports = {
   createDepartment,
   getDepartments,
   getDepartment,
   updateDepartment,
   deleteDepartment,
+  getDoctorsByDepartment,
 };

@@ -28,5 +28,8 @@ doctorRoute
     doctorController.updateDoctor,
   )
   .delete(auth, authorize(['admin']), validate(doctorValidation.deleteDoctor), doctorController.deleteDoctor);
+doctorRoute
+  .route('/:doctorId/working-times')
+  .get(auth, validate(doctorValidation.getWorkingTimesByDoctor), doctorController.getWorkingTimesByDoctor);
 
 module.exports = doctorRoute;

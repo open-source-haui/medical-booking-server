@@ -26,6 +26,13 @@ const getDepartmentById = async (departmentId) => {
   return department;
 };
 
+const getDoctorsByDepartment = async (departmentId) => {
+  const doctors = await Doctor.find({
+    departments: { $in: departmentId },
+  });
+  return doctors;
+};
+
 const updateDepartmentById = async (departmentId, updateBody) => {
   const department = await getDepartmentById(departmentId);
   if (updateBody.leader) {
@@ -51,4 +58,5 @@ module.exports = {
   getDepartmentById,
   updateDepartmentById,
   deleteDepartmentById,
+  getDoctorsByDepartment,
 };
