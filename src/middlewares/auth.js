@@ -1,5 +1,4 @@
-const { User, Role } = require('../models');
-const mongoose = require('mongoose');
+const { User, Role, HealthForm } = require('../models');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const { tokenService } = require('../services');
@@ -22,17 +21,43 @@ const auth = catchAsync(async (req, res, next) => {
 });
 
 const authorize = (rolesAllow) => async (req, res, next) => {
-  let check = true;
   for (const role of rolesAllow) {
     const roleNow = await Role.findOne({ roleIndex: role });
     const roleId = roleNow?._id;
-    if (!req.user.roles.includes(roleId)) {
-      check = false;
-      break;
+    if (req.user.roles.includes(roleId)) {
+      return next();
     }
   }
-  if (!check) return next(new ApiError(httpStatus.FORBIDDEN, 'Unauthorized'));
-  else return next();
+  return next(new ApiError(httpStatus.FORBIDDEN, 'Unauthorized'));
 };
 
-module.exports = { auth, authorize };
+const isMyHealthForm = (rolesAllow) => async (req, res, next) => {
+  const healthForm = await HealthForm.findById(req.params.healthFormId);
+  if (!healthForm) {
+    return next(new ApiError(httpStatus.NOT_FOUND, 'HealthForm not found'));
+  }
+
+  for (const role of rolesAllow) {
+    const roleNow = await Role.findOne({ roleIndex: role });
+    const roleId = roleNow?._id;
+    if (req.user.roles.includes(roleId)) {
+      return next();
+    }
+  }
+
+  if (healthForm.user.toString() !== req.user.id) {
+    return next(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
+  }
+
+  if (req.body.status) {
+    if (healthForm.status === 'pending' && req.body.status === 'cancel') {
+      return next();
+    } else {
+      return next(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
+    }
+  } else {
+    return next();
+  }
+};
+
+module.exports = { auth, authorize, isMyHealthForm };
