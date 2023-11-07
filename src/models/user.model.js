@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
     avatar: {
       type: String,
       default:
-        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1690136815/Music-Player-App/Default/g9e3aeu3mrnn5l1hu6qh.jpg',
+        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1699383593/medical-booking/image/sp1cmswjqpwuszoo3bzw.jpg',
     },
     gender: {
       type: String,

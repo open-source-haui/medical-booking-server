@@ -16,6 +16,8 @@ const getWorkingTimes = {
     endTime: Joi.string(),
     maxSlots: Joi.number(),
     populate: Joi.string(),
+    doctorId: Joi.string(),
+    date: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

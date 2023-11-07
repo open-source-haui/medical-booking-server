@@ -36,17 +36,8 @@ const paginate = (schema) => {
     const page = options.page && parseInt(options.page, 10) > 0 ? parseInt(options.page, 10) : 1;
     const skip = (page - 1) * limit;
 
-    const fuzzyFilter = {};
-    for (const key in filter) {
-      if (filter.hasOwnProperty(key)) {
-        fuzzyFilter[key] = {
-          $regex: new RegExp(filter[key], 'i'),
-        };
-      }
-    }
-
-    const countPromise = this.countDocuments(fuzzyFilter).exec();
-    let docsPromise = this.find(fuzzyFilter).sort(sort).skip(skip).limit(limit);
+    const countPromise = this.countDocuments(filter).exec();
+    let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
 
     if (options.populate) {
       options.populate.split(',').forEach((populateOption) => {

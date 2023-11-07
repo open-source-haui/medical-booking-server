@@ -4,13 +4,16 @@ const { roleController } = require('../../controllers');
 
 const roleRouter = express.Router();
 
-roleRouter.route('/').get(roleController.getRoles).post(roleController.createRole);
+roleRouter
+  .route('/')
+  .get(roleController.getRoles)
+  .post(auth, authorize(['admin']), roleController.createRole);
 
 roleRouter
   .route('/:roleId')
   .get(roleController.getRole)
-  .put(roleController.updateRole)
-  .delete(roleController.deleteRole)
-  .lock(roleController.lockRole);
+  .put(auth, authorize(['admin']), roleController.updateRole)
+  .delete(auth, authorize(['admin']), roleController.deleteRole)
+  .lock(auth, authorize(['admin']), roleController.lockRole);
 
 module.exports = roleRouter;

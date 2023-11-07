@@ -14,6 +14,15 @@ const createWorkingTime = async (workingTimeBody) => {
 const queryWorkingTimes = async (workingTimeQuery) => {
   const filter = pick(workingTimeQuery, ['startTime', 'endTime', 'maxSlots', 'registeredQuantity']);
   const options = pick(workingTimeQuery, ['sortBy', 'limit', 'page', 'populate']);
+  if (workingTimeQuery.doctorId && workingTimeQuery.date) {
+    const workingPlan = await WorkingPlan.findOne({
+      doctor: workingTimeQuery.doctorId,
+      date: new Date(workingTimeQuery.date),
+    });
+    const workingTimes = await WorkingTime.find({ workingPlan: workingPlan?._id });
+    const workingTimeIds = workingTimes.map((workingTime) => workingTime._id);
+    filter['_id'] = { $in: workingTimeIds };
+  }
   const workingTimes = await WorkingTime.paginate(filter, options);
   return workingTimes;
 };
