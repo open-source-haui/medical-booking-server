@@ -45,17 +45,10 @@ const deleteDepartment = {
   }),
 };
 
-const getDoctorsByDepartment = {
-  params: Joi.object().keys({
-    departmentId: Joi.string().custom(objectId),
-  }),
-};
-
 module.exports = {
   createDepartment,
   getDepartments,
   getDepartment,
   updateDepartment,
   deleteDepartment,
-  getDoctorsByDepartment,
 };

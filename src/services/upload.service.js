@@ -35,7 +35,7 @@ const delete_image = (imagePath) => {
 const uploadImage = multer({
   storage: storage_image,
   fileFilter: function (req, file, cb) {
-    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {

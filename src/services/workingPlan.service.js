@@ -14,6 +14,9 @@ const createWorkingPlan = async (workingPlanBody) => {
 const queryWorkingPlans = async (workingPlanQuery) => {
   const filter = pick(workingPlanQuery, ['date', 'dayOfWeek', 'place']);
   const options = pick(workingPlanQuery, ['sortBy', 'limit', 'page', 'populate']);
+  if (workingPlanQuery.doctorId) {
+    filter['doctor'] = workingPlanQuery.doctorId;
+  }
   const workingPlans = await WorkingPlan.paginate(filter, options);
   return workingPlans;
 };

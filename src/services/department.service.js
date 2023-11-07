@@ -4,15 +4,17 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 
 const createDepartment = async (departmentBody) => {
-  const leader = await Doctor.findById(departmentBody.leader);
-  if (!leader) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+  if (departmentBody.leader) {
+    const leader = await Doctor.findById(departmentBody.leader);
+    if (!leader) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+    }
   }
   return Department.create(departmentBody);
 };
 
 const queryDepartments = async (departmentQuery) => {
-  const filter = pick(departmentQuery, ['name', 'decription']);
+  const filter = pick(departmentQuery, ['name', 'description']);
   const options = pick(departmentQuery, ['sortBy', 'limit', 'page', 'populate']);
   const departments = await Department.paginate(filter, options);
   return departments;
@@ -24,13 +26,6 @@ const getDepartmentById = async (departmentId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Department not found');
   }
   return department;
-};
-
-const getDoctorsByDepartment = async (departmentId) => {
-  const doctors = await Doctor.find({
-    departments: { $in: departmentId },
-  });
-  return doctors;
 };
 
 const updateDepartmentById = async (departmentId, updateBody) => {
@@ -58,5 +53,4 @@ module.exports = {
   getDepartmentById,
   updateDepartmentById,
   deleteDepartmentById,
-  getDoctorsByDepartment,
 };

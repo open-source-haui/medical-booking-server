@@ -13,7 +13,7 @@ const workingTimeSchema = mongoose.Schema(
     },
     maxSlots: {
       type: Number,
-      default: 5,
+      default: 4,
     },
     registeredQuantity: {
       type: Number,

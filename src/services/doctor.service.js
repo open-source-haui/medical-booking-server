@@ -1,4 +1,4 @@
-const { Doctor, Hospital } = require('../models');
+const { Doctor } = require('../models');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
@@ -9,6 +9,10 @@ const createDoctor = async (doctorBody) => {
 
 const queryDoctors = async (doctorQuery) => {
   const filter = pick(doctorQuery, ['name', 'description', 'degree', 'experience']);
+  if (doctorQuery.departmentId) {
+    filter['departments'] = { $in: [doctorQuery.departmentId] };
+  }
+  console.log({ filter: filter });
   const options = pick(doctorQuery, ['sortBy', 'limit', 'page', 'populate']);
   const doctors = await Doctor.paginate(filter, options);
   return doctors;
@@ -35,22 +39,10 @@ const deleteDoctorById = async (doctorId) => {
   return doctor;
 };
 
-const getWorkingTimesByDoctor = async (doctorId, date) => {
-  const workingPlan = await WorkingPlan.findOne({
-    doctor: doctorId,
-    date: new Date(date),
-  });
-  const workingTimes = await WorkingTime.find({
-    workingPlan: workingPlan?._id,
-  });
-  return workingTimes;
-};
-
 module.exports = {
   createDoctor,
   queryDoctors,
   getDoctorById,
   updateDoctorById,
   deleteDoctorById,
-  getWorkingTimesByDoctor,
 };

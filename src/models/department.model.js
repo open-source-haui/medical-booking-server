@@ -15,12 +15,12 @@ const departmentSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      default: 'https://th.bing.com/th/id/OIP.o60vefi2fWgYc_2YA-PYOAHaHa?pid=ImgDet&w=550&h=550&rs=1',
+      default:
+        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1699383342/medical-booking/image/fbyu4yeghrmcggfof8gl.jpg',
     },
     leader: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Doctor',
-      required: true,
     },
   },
   { timestamps: true },

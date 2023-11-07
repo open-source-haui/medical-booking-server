@@ -18,6 +18,7 @@ const getDoctors = {
     description: Joi.string(),
     degree: Joi.string(),
     experience: Joi.number(),
+    departmentId: Joi.string(),
     populate: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -51,20 +52,10 @@ const deleteDoctor = {
   }),
 };
 
-const getWorkingTimesByDoctor = {
-  params: Joi.object().keys({
-    doctorId: Joi.string().required().custom(objectId),
-  }),
-  body: Joi.object().keys({
-    date: Joi.date().required(),
-  }),
-};
-
 module.exports = {
   createDoctor,
   getDoctors,
   getDoctor,
   updateDoctor,
   deleteDoctor,
-  getWorkingTimesByDoctor,
 };
