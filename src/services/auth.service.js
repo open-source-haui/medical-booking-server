@@ -12,6 +12,9 @@ const login = async (email, password) => {
   if (!user.isEmailVerified) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Account has not verified email');
   }
+  user.numberLogined += 1;
+  user.dateLastLogined = Date.now();
+  await user.save();
   return user;
 };
 

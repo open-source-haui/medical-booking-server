@@ -12,7 +12,6 @@ const queryDoctors = async (doctorQuery) => {
   if (doctorQuery.departmentId) {
     filter['departments'] = { $in: [doctorQuery.departmentId] };
   }
-  console.log({ filter: filter });
   const options = pick(doctorQuery, ['sortBy', 'limit', 'page', 'populate']);
   const doctors = await Doctor.paginate(filter, options);
   return doctors;

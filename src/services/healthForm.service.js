@@ -1,32 +1,31 @@
 const { HealthForm } = require('../models');
+const { workingTimeService, workingPlanService } = require('./');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
-const { departmentService, doctorService, workingTimeService } = require('./index');
 
 const createHealthForm = async (healthFormBody) => {
-  console.log(healthFormBody);
-  // check tồn tại
-  const doctor = await doctorService.getDoctorById(healthFormBody.doctor);
-  const department = await departmentService.getDepartmentById(healthFormBody.department);
-  const workingTime = await workingTimeService.getWorkingTimeById(healthFormBody.workingTime);
-
-  // check + set numberOrder
-  const healthForms = await HealthForm.find({
-    doctor: doctor._id,
-    workingTime: workingTime._id,
-  });
-  if (healthForms.length === 5) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Maximum number of health forms reached');
-  }
-  healthFormBody['numberOrder'] = healthForms.length + 1;
-
-  return HealthForm.create(healthFormBody);
+  const wokingTime = await workingTimeService.getWorkingTimeById(healthFormBody.workingTime);
+  const workingPlan = await workingPlanService.getWorkingPlanById(wokingTime.workingPlan);
+  healthFormBody.doctor = workingPlan.doctor;
+  const healthForms = await HealthForm.find({ workingTime: wokingTime._id });
+  const numberOrder = healthForms.length + 1;
+  healthFormBody.numberOrder = numberOrder;
+  return await HealthForm.create(healthFormBody);
 };
 
 const queryHealthForms = async (healthFormQuery) => {
-  const filter = pick(healthFormQuery, ['numberOrder', 'isConfirmed', 'note']);
+  const filter = pick(healthFormQuery, ['numberOrder', 'numberConfirm', 'note', 'status']);
   const options = pick(healthFormQuery, ['sortBy', 'limit', 'page', 'populate']);
+  if (healthFormQuery.userId) {
+    filter['user'] = healthFormQuery.userId;
+  }
+  if (healthFormQuery.doctorId) {
+    filter['doctor'] = healthFormQuery.doctorId;
+  }
+  if (healthFormQuery.workingTimeId) {
+    filter['workingTime'] = healthFormQuery.workingTimeId;
+  }
   const healthForms = await HealthForm.paginate(filter, options);
   return healthForms;
 };
@@ -41,11 +40,35 @@ const getHealthFormById = async (healthFormId) => {
 
 const updateHealthFormById = async (healthFormId, updateBody) => {
   const healthForm = await getHealthFormById(healthFormId);
-
-  if (updateBody.doctor) await doctorService.getDoctorById(updateBody.doctor);
-  if (updateBody.department) await departmentService.getDepartmentById(updateBody.department);
-  if (updateBody.workingTime) await workingTimeService.getWorkingTimeById(updateBody.workingTime);
-
+  if (healthForm.status === 'rejected') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Appointment rejected');
+  }
+  if (updateBody.status === 'pending') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Only confirm or reject');
+  }
+  const workingTime = await workingTimeService.getWorkingTimeById(healthForm.workingTime);
+  if (healthForm.status === 'pending') {
+    if (updateBody.status === 'accepted') {
+      // pending -> accepted
+      const healthFormConfirms = await HealthForm.find({ workingTime: healthForm._id, status: 'accepted' });
+      if (healthFormConfirms.length == workingTime.maxSlots) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Session is full');
+      }
+      healthForm.numberConfirm = healthFormConfirms.length + 1;
+      workingTime.registeredQuantity = workingTime.registeredQuantity + 1;
+      await workingTime.save();
+    }
+  } else {
+    if (updateBody.status === 'rejected') {
+      // confirm -> rejected
+      HealthForm.updateMany(
+        { wokingTime: healthForm.wokingTime, numberConfirm: { $gt: healthForm.numberConfirm } },
+        { $inc: { numberConfirm: -1 } },
+      );
+      workingTime.registeredQuantity = workingTime.registeredQuantity - 1;
+      await workingTime.save();
+    }
+  }
   Object.assign(healthForm, updateBody);
   await healthForm.save();
   return healthForm;
@@ -57,15 +80,10 @@ const deleteHealthFormById = async (healthFormId) => {
   return healthForm;
 };
 
-const getMyHealthForms = async (userId) => {
-  return await HealthForm.find({ user: userId });
-};
-
 module.exports = {
   createHealthForm,
   queryHealthForms,
   getHealthFormById,
   updateHealthFormById,
   deleteHealthFormById,
-  getMyHealthForms,
 };

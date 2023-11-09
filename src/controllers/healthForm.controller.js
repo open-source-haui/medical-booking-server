@@ -29,16 +29,10 @@ const deleteHealthForm = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
 });
 
-const getMyHealthForms = catchAsync(async (req, res) => {
-  const healthForm = await healthFormService.getMyHealthForms(req.user.id);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
-});
-
 module.exports = {
   createHealthForm,
   getHealthForms,
   getHealthForm,
   updateHealthForm,
   deleteHealthForm,
-  getMyHealthForms,
 };
