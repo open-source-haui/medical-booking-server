@@ -18,7 +18,7 @@ const getDoctors = {
     description: Joi.string(),
     degree: Joi.string(),
     experience: Joi.number(),
-    departmentId: Joi.string(),
+    departmentId: Joi.string().custom(objectId),
     populate: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),

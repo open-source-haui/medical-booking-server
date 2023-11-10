@@ -14,6 +14,9 @@ const createWorkingTime = async (workingTimeBody) => {
 const queryWorkingTimes = async (workingTimeQuery) => {
   const filter = pick(workingTimeQuery, ['startTime', 'endTime', 'maxSlots', 'registeredQuantity']);
   const options = pick(workingTimeQuery, ['sortBy', 'limit', 'page', 'populate']);
+  if (workingTimeQuery.workingPlanId) {
+    filter['workingPlan'] = workingTimeQuery.workingPlanId;
+  }
   if (workingTimeQuery.doctorId && workingTimeQuery.date) {
     const workingPlan = await WorkingPlan.findOne({
       doctor: workingTimeQuery.doctorId,

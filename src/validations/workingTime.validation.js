@@ -6,6 +6,7 @@ const createWorkingTime = {
     startTime: Joi.string().required(),
     endTime: Joi.string().required(),
     maxSlots: Joi.number(),
+    registeredQuantity: Joi.number(),
     workingPlan: Joi.string().required().custom(objectId),
   }),
 };
@@ -16,6 +17,7 @@ const getWorkingTimes = {
     endTime: Joi.string(),
     maxSlots: Joi.number(),
     populate: Joi.string(),
+    workingPlanId: Joi.string().custom(objectId),
     doctorId: Joi.string(),
     date: Joi.string(),
     sortBy: Joi.string(),

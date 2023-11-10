@@ -79,6 +79,13 @@ const userSchema = mongoose.Schema(
         ref: 'Role',
       },
     ],
+    numberLogined: {
+      type: Number,
+      default: 0,
+    },
+    dateLastLogined: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
