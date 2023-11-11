@@ -15,14 +15,14 @@ const sendEmail = async (to, subject, html) => {
 
 const sendResetPasswordEmail = async (to, token, name) => {
   const subject = 'Reset password';
-  const resetPasswordUrl = `http://localhost:3000/api/v1/auth/reset-password?token=${token}`;
+  const resetPasswordUrl = `${config.base_url}/api/v1/auth/reset-password?token=${token}`;
   const html = `<p><b style="color:blue">Hello ${name}</b><br><i>To reset your password, click on this link: ${resetPasswordUrl}<br>If you did not request any password resets, then ignore this email.</i></p>`;
   await sendEmail(to, subject, html);
 };
 
 const sendVerificationEmail = async (to, token, name) => {
   const subject = 'Email Verification';
-  const verificationEmailUrl = `http://localhost:3000/api/v1/auth/verify-email?token=${token}`;
+  const verificationEmailUrl = `${config.base_url}/api/v1/auth/verify-email?token=${token}`;
   const html = `<p><b style="color:blue">Hello ${name}</b><br><i>To verify your email, click on this link: ${verificationEmailUrl}<br>If you did not create an account, then ignore this email.</i></p>`;
   await sendEmail(to, subject, html);
 };

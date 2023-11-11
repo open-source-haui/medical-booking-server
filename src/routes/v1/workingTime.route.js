@@ -8,7 +8,7 @@ const workingTimeRoute = express.Router();
 
 workingTimeRoute
   .route('/')
-  .get(auth, validate(workingTimeValidation.getWorkingTimes), workingTimeController.getWorkingTimes)
+  .get(validate(workingTimeValidation.getWorkingTimes), workingTimeController.getWorkingTimes)
   .post(
     auth,
     authorize(['admin']),
@@ -17,13 +17,8 @@ workingTimeRoute
   );
 workingTimeRoute
   .route('/:workingTimeId')
-  .get(auth, validate(workingTimeValidation.getWorkingTime), workingTimeController.getWorkingTime)
-  .put(
-    auth,
-    authorize(['admin']),
-    validate(workingTimeValidation.updateWorkingTime),
-    workingTimeController.updateWorkingTime,
-  )
+  .get(validate(workingTimeValidation.getWorkingTime), workingTimeController.getWorkingTime)
+  .put(auth, validate(workingTimeValidation.updateWorkingTime), workingTimeController.updateWorkingTime)
   .delete(
     auth,
     authorize(['admin']),

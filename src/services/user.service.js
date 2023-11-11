@@ -16,8 +16,13 @@ const createUser = async (userBody) => {
 };
 
 const queryUsers = async (userQuery) => {
-  const filter = pick(userQuery, ['email', 'fullName', 'role']);
+  const filter = pick(userQuery, ['email']);
   const options = pick(userQuery, ['sortBy', 'limit', 'page', 'populate']);
+  if (userQuery.role) {
+    const roles = await Role.find({ roleIndex: userQuery.role });
+    const roleIds = roles.map((role) => role._id);
+    filter['roles'] = { $in: roleIds };
+  }
   const users = await User.paginate(filter, options);
   return users;
 };
