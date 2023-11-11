@@ -8,7 +8,7 @@ const workingPlanRoute = express.Router();
 
 workingPlanRoute
   .route('/')
-  .get(auth, validate(workingPlanValidation.getWorkingPlans), workingPlanController.getWorkingPlans)
+  .get(validate(workingPlanValidation.getWorkingPlans), workingPlanController.getWorkingPlans)
   .post(
     auth,
     authorize(['admin']),
@@ -17,7 +17,7 @@ workingPlanRoute
   );
 workingPlanRoute
   .route('/:workingPlanId')
-  .get(auth, validate(workingPlanValidation.getWorkingPlan), workingPlanController.getWorkingPlan)
+  .get(validate(workingPlanValidation.getWorkingPlan), workingPlanController.getWorkingPlan)
   .put(
     auth,
     authorize(['admin']),

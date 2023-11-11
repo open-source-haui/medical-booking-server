@@ -9,7 +9,7 @@ const departmentRoute = express.Router();
 
 departmentRoute
   .route('/')
-  .get(auth, validate(departmentValidation.getDepartments), departmentController.getDepartments)
+  .get(validate(departmentValidation.getDepartments), departmentController.getDepartments)
   .post(
     auth,
     authorize(['admin']),
@@ -19,7 +19,7 @@ departmentRoute
   );
 departmentRoute
   .route('/:departmentId')
-  .get(auth, validate(departmentValidation.getDepartment), departmentController.getDepartment)
+  .get(validate(departmentValidation.getDepartment), departmentController.getDepartment)
   .put(
     auth,
     authorize(['admin']),

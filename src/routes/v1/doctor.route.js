@@ -9,7 +9,7 @@ const doctorRoute = express.Router();
 
 doctorRoute
   .route('/')
-  .get(auth, validate(doctorValidation.getDoctors), doctorController.getDoctors)
+  .get(validate(doctorValidation.getDoctors), doctorController.getDoctors)
   .post(
     auth,
     authorize(['admin']),
@@ -19,7 +19,7 @@ doctorRoute
   );
 doctorRoute
   .route('/:doctorId')
-  .get(auth, validate(doctorValidation.getDoctor), doctorController.getDoctor)
+  .get(validate(doctorValidation.getDoctor), doctorController.getDoctor)
   .put(
     auth,
     authorize(['admin']),
