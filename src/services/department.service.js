@@ -21,7 +21,7 @@ const queryDepartments = async (departmentQuery) => {
 };
 
 const getDepartmentById = async (departmentId) => {
-  const department = await Department.findById(departmentId);
+  const department = await Department.findById(departmentId).populate('leader');
   if (!department) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Department not found');
   }

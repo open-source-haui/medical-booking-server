@@ -28,7 +28,7 @@ const queryUsers = async (userQuery) => {
 };
 
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).populate('roles');
 };
 
 const getUserByEmail = async (email) => {

@@ -31,7 +31,7 @@ const queryWorkingTimes = async (workingTimeQuery) => {
 };
 
 const getWorkingTimeById = async (workingTimeId) => {
-  const workingTime = await WorkingTime.findById(workingTimeId);
+  const workingTime = await WorkingTime.findById(workingTimeId).populate('workingPlan');
   if (!workingTime) {
     throw new ApiError(httpStatus.NOT_FOUND, 'WorkingTime not found');
   }

@@ -31,7 +31,7 @@ const queryHealthForms = async (healthFormQuery) => {
 };
 
 const getHealthFormById = async (healthFormId) => {
-  const healthForm = await HealthForm.findById(healthFormId);
+  const healthForm = await HealthForm.findById(healthFormId).populate(['user', 'doctor', 'workingTime']);
   if (!healthForm) {
     throw new ApiError(httpStatus.NOT_FOUND, 'HealthForm not found');
   }

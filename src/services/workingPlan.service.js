@@ -22,7 +22,7 @@ const queryWorkingPlans = async (workingPlanQuery) => {
 };
 
 const getWorkingPlanById = async (workingPlanId) => {
-  const workingPlan = await WorkingPlan.findById(workingPlanId);
+  const workingPlan = await WorkingPlan.findById(workingPlanId).populate('doctor');
   if (!workingPlan) {
     throw new ApiError(httpStatus.NOT_FOUND, 'WorkingPlan not found');
   }

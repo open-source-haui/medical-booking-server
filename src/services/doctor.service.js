@@ -18,7 +18,7 @@ const queryDoctors = async (doctorQuery) => {
 };
 
 const getDoctorById = async (doctorId) => {
-  const doctor = await Doctor.findById(doctorId);
+  const doctor = await Doctor.findById(doctorId).populate('departments');
   if (!doctor) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Doctor not found');
   }
