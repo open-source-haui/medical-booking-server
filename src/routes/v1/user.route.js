@@ -7,6 +7,7 @@ const { uploadService } = require('../../services');
 
 const userRouter = express.Router();
 
+userRouter.route('/export').get(userController.exportUsersToExcel);
 userRouter
   .route('/profile')
   .get(auth, validate(userValidation.getUser), userController.getUser)
@@ -18,7 +19,7 @@ userRouter
   );
 userRouter
   .route('/')
-  .get(auth, validate(userValidation.getUsers), validate(userValidation.getUser), userController.getUsers)
+  .get(auth, validate(userValidation.getUsers), validate(userValidation.getUsers), userController.getUsers)
   .post(
     auth,
     authorize(['admin']),

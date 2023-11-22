@@ -45,6 +45,15 @@ const lockUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', user));
 });
 
+const exportUsersToExcel = catchAsync(async (req, res) => {
+  const workbook = await userService.exportUsersToExcel(req.query);
+  const encodedFileName = encodeURIComponent('Danh sách người dùng hệ thống.xlsx');
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodedFileName}`);
+  await workbook.xlsx.write(res);
+  res.end();
+});
+
 module.exports = {
   createUser,
   getUsers,
@@ -53,4 +62,5 @@ module.exports = {
   deleteUser,
   updateProfile,
   lockUser,
+  exportUsersToExcel,
 };
