@@ -7,7 +7,7 @@ const createDepartment = async (departmentBody) => {
   if (departmentBody.leader) {
     const leader = await Doctor.findById(departmentBody.leader);
     if (!leader) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+      throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ trưởng khoa');
     }
   }
   return Department.create(departmentBody);
@@ -23,7 +23,7 @@ const queryDepartments = async (departmentQuery) => {
 const getDepartmentById = async (departmentId) => {
   const department = await Department.findById(departmentId).populate('leader');
   if (!department) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Department not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy khoa khám');
   }
   return department;
 };
@@ -33,7 +33,7 @@ const updateDepartmentById = async (departmentId, updateBody) => {
   if (updateBody.leader) {
     const leader = await Doctor.findById(updateBody.leader);
     if (!leader) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+      throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ trưởng khoa');
     }
   }
   Object.assign(department, updateBody);

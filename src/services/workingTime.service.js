@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 const createWorkingTime = async (workingTimeBody) => {
   const workingPlan = await WorkingPlan.findById(workingTimeBody.workingPlan);
   if (!workingPlan) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'WorkingPlan not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy lịch làm việc');
   }
   return WorkingTime.create(workingTimeBody);
 };
@@ -33,7 +33,7 @@ const queryWorkingTimes = async (workingTimeQuery) => {
 const getWorkingTimeById = async (workingTimeId) => {
   const workingTime = await WorkingTime.findById(workingTimeId).populate('workingPlan');
   if (!workingTime) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'WorkingTime not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy thời gian làm việc');
   }
   return workingTime;
 };
@@ -43,7 +43,7 @@ const updateWorkingTimeById = async (workingTimeId, updateBody) => {
   if (updateBody.workingPlan) {
     const workingPlan = await WorkingPlan.findById(updateBody.workingPlan);
     if (!workingPlan) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'WorkingPlan not found');
+      throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy lịch làm việc');
     }
   }
   Object.assign(workingTime, updateBody);

@@ -9,7 +9,7 @@ const ApiError = require('../utils/ApiError');
 
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email đã tồn tại');
   }
   const role = await Role.findOne({ roleIndex: 'khach-hang' });
   const roles = userBody.roles || (role ? [role._id] : []);
@@ -40,10 +40,10 @@ const getUserByEmail = async (email) => {
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy người dùng');
   }
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email đã tồn tại');
   }
   Object.assign(user, updateBody);
   await user.save();
@@ -53,7 +53,7 @@ const updateUserById = async (userId, updateBody) => {
 const deleteUserById = async (userId) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy người dùng');
   }
   await user.deleteOne();
   return user;
@@ -62,7 +62,7 @@ const deleteUserById = async (userId) => {
 const lockUserById = async (userId) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy người dùng');
   }
   Object.assign(user, { isLocked: !user.isLocked });
   await user.save();

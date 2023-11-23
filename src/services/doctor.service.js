@@ -20,7 +20,7 @@ const queryDoctors = async (doctorQuery) => {
 const getDoctorById = async (doctorId) => {
   const doctor = await Doctor.findById(doctorId).populate('departments');
   if (!doctor) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Doctor not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ');
   }
   return doctor;
 };

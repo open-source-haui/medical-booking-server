@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Invalid email address');
+          throw new Error('Địa chỉ email không hợp lệ');
         }
       },
     },
@@ -21,10 +21,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 8,
       validate(value) {
+        if (value.length < 8) {
+          throw new Error('Mật khẩu phải chứa ít nhất 8 ký tự');
+        }
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
+          throw new Error('Mật khẩu phải chứa ít nhất một chữ cái và một số');
         }
       },
       private: true,
