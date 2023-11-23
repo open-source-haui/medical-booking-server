@@ -12,9 +12,12 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const cron = require('node-cron');
-const { workingPlanService } = require('./services');
+const { dataService } = require('./services');
 
 const app = express();
+
+// Auto generate working plan every day
+cron.schedule('0 1 * * *', dataService.autoGenerateWorkingPlanAndWorkingTime);
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -64,8 +67,5 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
-// Auto generate working plan every day
-cron.schedule('0 0 * * *', workingPlanService.autoGenerateWorkingPlan);
 
 module.exports = app;
