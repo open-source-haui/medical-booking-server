@@ -31,9 +31,9 @@ const queryHealthForms = async (healthFormQuery) => {
 };
 
 const getHealthFormById = async (healthFormId) => {
-  const healthForm = await HealthForm.findById(healthFormId);
+  const healthForm = await HealthForm.findById(healthFormId).populate(['user', 'doctor', 'workingTime']);
   if (!healthForm) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'HealthForm not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy lịch hẹn khám');
   }
   return healthForm;
 };
@@ -41,10 +41,10 @@ const getHealthFormById = async (healthFormId) => {
 const updateHealthFormById = async (healthFormId, updateBody) => {
   const healthForm = await getHealthFormById(healthFormId);
   if (healthForm.status === 'rejected') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Appointment rejected');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn khám đã bị hủy');
   }
   if (updateBody.status === 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Only confirm or reject');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Trạng thái cho phép cập nhật là confirm hoặc reject');
   }
   const workingTime = await workingTimeService.getWorkingTimeById(healthForm.workingTime);
   if (healthForm.status === 'pending') {
@@ -52,7 +52,7 @@ const updateHealthFormById = async (healthFormId, updateBody) => {
       // pending -> accepted
       const healthFormConfirms = await HealthForm.find({ workingTime: healthForm._id, status: 'accepted' });
       if (healthFormConfirms.length == workingTime.maxSlots) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Session is full');
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn khám đã đầy');
       }
       healthForm.numberConfirm = healthFormConfirms.length + 1;
       workingTime.registeredQuantity = workingTime.registeredQuantity + 1;
@@ -60,7 +60,7 @@ const updateHealthFormById = async (healthFormId, updateBody) => {
     }
   } else {
     if (updateBody.status === 'rejected') {
-      // confirm -> rejected
+      // accepted -> rejected
       HealthForm.updateMany(
         { wokingTime: healthForm.wokingTime, numberConfirm: { $gt: healthForm.numberConfirm } },
         { $inc: { numberConfirm: -1 } },

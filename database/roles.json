@@ -1,3 +1,3 @@
-{"_id":{"$oid":"654a6cac16d1e25419caed7c"},"roleName":"Khách hàng","roleIndex":"khach-hang","isLocked":false,"__v":0,"createdAt":{"$date":"2023-11-07T16:58:20.408Z"},"updatedAt":{"$date":"2023-11-07T16:58:20.408Z"}}
 {"_id":{"$oid":"654a6cac16d1e25419caed7d"},"roleName":"Admin","roleIndex":"admin","isLocked":false,"__v":0,"createdAt":{"$date":"2023-11-07T16:58:20.408Z"},"updatedAt":{"$date":"2023-11-07T16:58:20.408Z"}}
 {"_id":{"$oid":"654a6cac16d1e25419caed7e"},"roleName":"Nhân viên phê duyệt","roleIndex":"nhan-vien-phe-duyet","isLocked":false,"__v":0,"createdAt":{"$date":"2023-11-07T16:58:20.408Z"},"updatedAt":{"$date":"2023-11-07T16:58:20.408Z"}}
+{"_id":{"$oid":"654a6cac16d1e25419caed7c"},"roleName":"Khách hàng","roleIndex":"khach-hang","isLocked":false,"__v":0,"createdAt":{"$date":"2023-11-07T16:58:20.408Z"},"updatedAt":{"$date":"2023-11-07T16:58:20.408Z"}}
