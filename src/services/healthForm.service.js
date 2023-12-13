@@ -1,13 +1,17 @@
 const { HealthForm } = require('../models');
-const { workingTimeService, workingPlanService } = require('./');
+const { workingTimeService, workingPlanService, doctorService, departmentService } = require('./');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 
 const createHealthForm = async (healthFormBody) => {
   const wokingTime = await workingTimeService.getWorkingTimeById(healthFormBody.workingTime);
-  const workingPlan = await workingPlanService.getWorkingPlanById(wokingTime.workingPlan);
-  healthFormBody.doctor = workingPlan.doctor;
+  const workingPlan = await workingPlanService.getWorkingPlanById(wokingTime.workingPlan._id);
+  healthFormBody.doctor = workingPlan.doctor._id;
+  const doctor = await doctorService.getDoctorById(workingPlan.doctor._id);
+  const departmentId = doctor.departments;
+  const department = await departmentService.getDepartmentById(departmentId[0]);
+  healthFormBody.department = department.name;
   const healthForms = await HealthForm.find({ workingTime: wokingTime._id });
   const numberOrder = healthForms.length + 1;
   healthFormBody.numberOrder = numberOrder;
@@ -25,6 +29,10 @@ const queryHealthForms = async (healthFormQuery) => {
   }
   if (healthFormQuery.workingTimeId) {
     filter['workingTime'] = healthFormQuery.workingTimeId;
+  }
+  if (healthFormQuery.departmentId) {
+    const department = await departmentService.getDepartmentById(healthFormQuery.departmentId);
+    filter['department'] = department.name;
   }
   const healthForms = await HealthForm.paginate(filter, options);
   return healthForms;

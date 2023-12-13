@@ -45,6 +45,7 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
       enum: ['Nam', 'Nữ', 'Khác'],
+      default: 'Khác',
     },
     dateOfBirth: {
       type: Date,
