@@ -13,7 +13,11 @@ userRouter
   .get(auth, validate(userValidation.getUser), userController.getUser)
   .put(
     auth,
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.updateUser),
     userController.updateProfile,
   );
@@ -23,7 +27,11 @@ userRouter
   .post(
     auth,
     authorize(['admin']),
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.createUser),
     userController.createUser,
   );
@@ -33,7 +41,11 @@ userRouter
   .put(
     auth,
     authorize(['admin']),
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.updateUser),
     userController.updateUser,
   )
