@@ -18,6 +18,10 @@ const healthFormSchema = mongoose.Schema(
       ref: 'WorkingTime',
       required: true,
     },
+    department: {
+      type: String,
+      required: true,
+    },
     numberOrder: {
       type: Number,
       required: true,

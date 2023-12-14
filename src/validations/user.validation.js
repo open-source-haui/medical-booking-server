@@ -3,11 +3,20 @@ const { email, password, objectId } = require('./custom.validation');
 
 const createUser = {
   body: Joi.object().keys({
-    email: Joi.string().required().custom(email),
-    password: Joi.string().required().custom(password),
-    fullName: Joi.string().required(),
-    roles: Joi.array().items(Joi.string().custom(objectId)),
+    email: Joi.string().custom(email),
+    fullName: Joi.string(),
+    password: Joi.string().custom(password),
     avatar: Joi.string(),
+    gender: Joi.string(),
+    dateOfBirth: Joi.date(),
+    address: Joi.string(),
+    phoneNumber: Joi.string(),
+    cmndNumber: Joi.string(),
+    codeInsurance: Joi.string(),
+    cmndImg: Joi.string(),
+    insuranceImg: Joi.string(),
+    nation: Joi.string(),
+    roles: Joi.array().items(Joi.string().custom(objectId)),
   }),
 };
 
@@ -34,10 +43,19 @@ const updateUser = {
   body: Joi.object()
     .keys({
       email: Joi.string().custom(email),
-      password: Joi.string().custom(password),
       fullName: Joi.string(),
-      roles: Joi.array().items(Joi.string().custom(objectId)),
+      password: Joi.string().custom(password),
       avatar: Joi.string(),
+      gender: Joi.string(),
+      dateOfBirth: Joi.date(),
+      address: Joi.string(),
+      phoneNumber: Joi.string(),
+      cmndNumber: Joi.string(),
+      codeInsurance: Joi.string(),
+      cmndImg: Joi.string(),
+      insuranceImg: Joi.string(),
+      nation: Joi.string(),
+      roles: Joi.array().items(Joi.string().custom(objectId)),
     })
     .min(1),
 };

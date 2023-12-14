@@ -45,6 +45,7 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
       enum: ['Nam', 'Nữ', 'Khác'],
+      default: 'Khác',
     },
     dateOfBirth: {
       type: Date,
@@ -57,7 +58,19 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    cmndNumber: {
+      type: String,
+      trim: true,
+    },
     codeInsurance: {
+      type: String,
+      trim: true,
+    },
+    cmndImg: {
+      type: String,
+      trim: true,
+    },
+    insuranceImg: {
       type: String,
       trim: true,
     },
