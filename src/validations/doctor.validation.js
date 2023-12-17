@@ -8,7 +8,7 @@ const createDoctor = {
     degree: Joi.string().required(),
     experience: Joi.number().required(),
     image: Joi.string(),
-    departments: Joi.array().items(Joi.string().custom(objectId)),
+    department: Joi.string().custom(objectId),
   }),
 };
 
@@ -42,7 +42,7 @@ const updateDoctor = {
     degree: Joi.string(),
     experience: Joi.number(),
     image: Joi.string(),
-    departments: Joi.array().items(Joi.string().custom(objectId)),
+    department: Joi.string().custom(objectId),
   }),
 };
 

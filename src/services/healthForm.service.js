@@ -9,8 +9,7 @@ const createHealthForm = async (healthFormBody) => {
   const workingPlan = await workingPlanService.getWorkingPlanById(wokingTime.workingPlan._id);
   healthFormBody.doctor = workingPlan.doctor._id;
   const doctor = await doctorService.getDoctorById(workingPlan.doctor._id);
-  const departmentId = doctor.departments;
-  const department = await departmentService.getDepartmentById(departmentId[0]);
+  const department = await departmentService.getDepartmentById(doctor.department._id);
   healthFormBody.department = department.name;
   const healthForms = await HealthForm.find({ workingTime: wokingTime._id });
   const numberOrder = healthForms.length + 1;
@@ -19,7 +18,7 @@ const createHealthForm = async (healthFormBody) => {
 };
 
 const queryHealthForms = async (healthFormQuery) => {
-  const filter = pick(healthFormQuery, ['numberOrder', 'numberConfirm', 'note', 'status']);
+  const filter = pick(healthFormQuery, ['department', 'numberOrder', 'numberConfirm', 'note', 'status']);
   const options = pick(healthFormQuery, ['sortBy', 'limit', 'page', 'populate']);
   if (healthFormQuery.userId) {
     filter['user'] = healthFormQuery.userId;
@@ -29,10 +28,6 @@ const queryHealthForms = async (healthFormQuery) => {
   }
   if (healthFormQuery.workingTimeId) {
     filter['workingTime'] = healthFormQuery.workingTimeId;
-  }
-  if (healthFormQuery.departmentId) {
-    const department = await departmentService.getDepartmentById(healthFormQuery.departmentId);
-    filter['department'] = department.name;
   }
   const healthForms = await HealthForm.paginate(filter, options);
   return healthForms;

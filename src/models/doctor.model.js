@@ -27,13 +27,11 @@ const doctorSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    departments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Department',
-        default: [],
-      },
-    ],
+    department: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Department',
+      require: true,
+    },
   },
   { timestamps: true },
 );

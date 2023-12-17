@@ -10,7 +10,7 @@ const createDoctor = async (doctorBody) => {
 const queryDoctors = async (doctorQuery) => {
   const filter = pick(doctorQuery, ['name', 'description', 'degree', 'experience']);
   if (doctorQuery.departmentId) {
-    filter['departments'] = { $in: [doctorQuery.departmentId] };
+    filter['department'] = doctorQuery.departmentId;
   }
   const options = pick(doctorQuery, ['sortBy', 'limit', 'page', 'populate']);
   const doctors = await Doctor.paginate(filter, options);
@@ -18,7 +18,7 @@ const queryDoctors = async (doctorQuery) => {
 };
 
 const getDoctorById = async (doctorId) => {
-  const doctor = await Doctor.findById(doctorId).populate('departments');
+  const doctor = await Doctor.findById(doctorId).populate('department');
   if (!doctor) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ');
   }
