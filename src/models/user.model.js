@@ -54,6 +54,10 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    job: {
+      type: String,
+      trim: true,
+    },
     phoneNumber: {
       type: String,
       trim: true,
