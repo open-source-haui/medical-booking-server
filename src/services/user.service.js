@@ -25,6 +25,15 @@ const queryUsers = async (userQuery) => {
     const roleIds = roles.map((role) => role._id);
     filter['roles'] = { $in: roleIds };
   }
+  if (userQuery.isLocked == 'true') {
+    const users = await User.find({ isLocked: true });
+    const userIds = users.map((user) => user._id);
+    filter['_id'] = { $in: userIds };
+  } else if (userQuery.isLocked == 'false') {
+    const users = await User.find({ isLocked: false });
+    const userIds = users.map((user) => user._id);
+    filter['_id'] = { $in: userIds };
+  }
   const users = await User.paginate(filter, options);
   return users;
 };

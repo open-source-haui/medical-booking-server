@@ -18,6 +18,9 @@ const departmentSchema = mongoose.Schema(
       default:
         'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1699383342/medical-booking/image/fbyu4yeghrmcggfof8gl.jpg',
     },
+    yearFounded: {
+      type: Number,
+    },
     leader: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Doctor',

@@ -12,6 +12,9 @@ const login = async (email, password) => {
   if (!user.isEmailVerified) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Yêu cầu xác thực email trước khi đăng nhập');
   }
+  if (user.isLocked) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Tài khoản này đã bị khóa');
+  }
   user.numberLogined += 1;
   user.dateLastLogined = Date.now();
   await user.save();

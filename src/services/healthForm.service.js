@@ -18,7 +18,7 @@ const createHealthForm = async (healthFormBody) => {
 };
 
 const queryHealthForms = async (healthFormQuery) => {
-  const filter = pick(healthFormQuery, ['department', 'numberOrder', 'numberConfirm', 'note', 'status']);
+  const filter = pick(healthFormQuery, ['department', 'status', 'reason', 'note', 'email', 'fullName']);
   const options = pick(healthFormQuery, ['sortBy', 'limit', 'page', 'populate']);
   if (healthFormQuery.userId) {
     filter['user'] = healthFormQuery.userId;

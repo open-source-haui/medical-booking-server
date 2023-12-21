@@ -7,6 +7,7 @@ const createDepartment = {
     description: Joi.string().required(),
     leader: Joi.string().custom(objectId),
     image: Joi.string(),
+    yearFounded: Joi.number(),
   }),
 };
 
@@ -36,6 +37,7 @@ const updateDepartment = {
     description: Joi.string(),
     leader: Joi.string().custom(objectId),
     image: Joi.string(),
+    yearFounded: Joi.number(),
   }),
 };
 

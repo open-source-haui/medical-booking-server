@@ -3,7 +3,23 @@ const catchAsync = require('../utils/catchAsync');
 const response = require('../utils/response');
 const { healthFormService } = require('../services');
 
+const uploadImage = (req, res) => {
+  if (req.files) {
+    // console.log(req.files);
+    const cmndImg = req.files.cmndImg;
+    const insuranceImg = req.files.insuranceImg;
+    if (cmndImg) {
+      req.body.cmndImg = cmndImg[0].path;
+    }
+    if (insuranceImg) {
+      req.body.insuranceImg = insuranceImg[0].path;
+    }
+  }
+  // console.log(req.body);
+};
+
 const createHealthForm = catchAsync(async (req, res) => {
+  uploadImage(req, res);
   req.body.user = req.user.id;
   const healthForm = await healthFormService.createHealthForm(req.body);
   res
@@ -22,6 +38,7 @@ const getHealthForm = catchAsync(async (req, res) => {
 });
 
 const updateHealthForm = catchAsync(async (req, res) => {
+  uploadImage(req, res);
   const healthForm = await healthFormService.updateHealthFormById(req.params.healthFormId, req.body);
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', healthForm));
 });

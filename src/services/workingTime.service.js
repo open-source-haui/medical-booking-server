@@ -25,6 +25,12 @@ const queryWorkingTimes = async (workingTimeQuery) => {
     const workingTimes = await WorkingTime.find({ workingPlan: workingPlan?._id });
     const workingTimeIds = workingTimes.map((workingTime) => workingTime._id);
     filter['_id'] = { $in: workingTimeIds };
+  } else if (workingTimeQuery.doctorId) {
+    const workingPlans = await WorkingPlan.find({
+      doctor: workingTimeQuery.doctorId,
+    });
+    const workingPlanIds = workingPlans.map((workingPlan) => workingPlan._id);
+    filter['workingPlan'] = { $in: workingPlanIds };
   }
   const workingTimes = await WorkingTime.paginate(filter, options);
   return workingTimes;

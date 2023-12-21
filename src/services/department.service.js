@@ -14,7 +14,7 @@ const createDepartment = async (departmentBody) => {
 };
 
 const queryDepartments = async (departmentQuery) => {
-  const filter = pick(departmentQuery, ['name', 'description']);
+  const filter = pick(departmentQuery, ['name', 'description', 'yearFounded']);
   const options = pick(departmentQuery, ['sortBy', 'limit', 'page', 'populate']);
   const departments = await Department.paginate(filter, options);
   return departments;

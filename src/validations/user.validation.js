@@ -18,13 +18,17 @@ const createUser = {
     insuranceImg: Joi.string(),
     nation: Joi.string(),
     roles: Joi.array().items(Joi.string().custom(objectId)),
+    isEmailVerified: Joi.boolean(),
+    isLocked: Joi.boolean(),
   }),
 };
 
 const getUsers = {
   query: Joi.object().keys({
     email: Joi.string(),
+    fullName: Joi.string(),
     role: Joi.string(),
+    isLocked: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -58,6 +62,8 @@ const updateUser = {
       insuranceImg: Joi.string(),
       nation: Joi.string(),
       roles: Joi.array().items(Joi.string().custom(objectId)),
+      isEmailVerified: Joi.boolean(),
+      isLocked: Joi.boolean(),
     })
     .min(1),
 };
