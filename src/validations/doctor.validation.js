@@ -8,7 +8,7 @@ const createDoctor = {
     degree: Joi.string().required(),
     experience: Joi.number().required(),
     image: Joi.string(),
-    departments: Joi.array().items(Joi.string().custom(objectId)),
+    department: Joi.string().custom(objectId),
   }),
 };
 
@@ -18,6 +18,7 @@ const getDoctors = {
     description: Joi.string(),
     degree: Joi.string(),
     experience: Joi.number(),
+    departmentId: Joi.string().custom(objectId),
     populate: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -41,7 +42,7 @@ const updateDoctor = {
     degree: Joi.string(),
     experience: Joi.number(),
     image: Joi.string(),
-    departments: Joi.array().items(Joi.string().custom(objectId)),
+    department: Joi.string().custom(objectId),
   }),
 };
 
@@ -51,20 +52,10 @@ const deleteDoctor = {
   }),
 };
 
-const getWorkingTimesByDoctor = {
-  params: Joi.object().keys({
-    doctorId: Joi.string().required().custom(objectId),
-  }),
-  body: Joi.object().keys({
-    date: Joi.date().required(),
-  }),
-};
-
 module.exports = {
   createDoctor,
   getDoctors,
   getDoctor,
   updateDoctor,
   deleteDoctor,
-  getWorkingTimesByDoctor,
 };

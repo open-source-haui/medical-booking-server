@@ -26,20 +26,20 @@ const delete_image = (imagePath) => {
     'medical-booking/image' + imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('.'));
   cloudinary.uploader.destroy(publicId, (error, result) => {
     if (error) {
-      console.error('Error deleting avatar from Cloudinary:', error);
+      console.error('Lỗi xóa hình đại diện khỏi Cloudinary', error);
     }
-    console.log('Deleted avatar from Cloudinary:', result);
+    console.log('Đã xóa hình đại diện khỏi Cloudinary', result);
   });
 };
 
 const uploadImage = multer({
   storage: storage_image,
   fileFilter: function (req, file, cb) {
-    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only .jpg, .jpeg, .png, and .gif file formats are allowed'));
+      cb(new Error('Chỉ cho phép các định dạng tệp .jpg, .jpeg, .png và .gif'));
     }
   },
 });

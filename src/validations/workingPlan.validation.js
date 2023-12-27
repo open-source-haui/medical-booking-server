@@ -14,6 +14,7 @@ const getWorkingPlans = {
     date: Joi.date(),
     place: Joi.string(),
     dayOfWeek: Joi.string(),
+    doctorId: Joi.string(),
     sortBy: Joi.string(),
     populate: Joi.string(),
     limit: Joi.number().integer(),

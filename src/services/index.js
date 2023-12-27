@@ -1,12 +1,12 @@
 module.exports.userService = require('./user.service');
 module.exports.roleService = require('./role.service');
-module.exports.tokenService = require('./token.service');
 module.exports.authService = require('./auth.service');
+module.exports.tokenService = require('./token.service');
 module.exports.emailService = require('./email.service');
 module.exports.uploadService = require('./upload.service');
 module.exports.dataService = require('./data.service');
 module.exports.doctorService = require('./doctor.service');
-module.exports.workingTimeService = require('./workingTime.service');
 module.exports.departmentService = require('./department.service');
-module.exports.healthFormService = require('./healthForm.service');
+module.exports.workingTimeService = require('./workingTime.service');
 module.exports.workingPlanService = require('./workingPlan.service');
+module.exports.healthFormService = require('./healthForm.service');

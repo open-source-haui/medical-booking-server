@@ -1,19 +1,29 @@
 const Joi = require('joi');
-const { password, objectId } = require('./custom.validation');
+const { email, password, objectId } = require('./custom.validation');
 
 const createUser = {
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().custom(password),
-    fullName: Joi.string().required(),
-    roles: Joi.array(),
+    email: Joi.string().custom(email),
+    fullName: Joi.string(),
+    password: Joi.string().custom(password),
     avatar: Joi.string(),
+    gender: Joi.string(),
+    dateOfBirth: Joi.date(),
+    address: Joi.string(),
+    job: Joi.string(),
+    phoneNumber: Joi.string(),
+    cmndNumber: Joi.string(),
+    codeInsurance: Joi.string(),
+    cmndImg: Joi.string(),
+    insuranceImg: Joi.string(),
+    nation: Joi.string(),
+    roles: Joi.array().items(Joi.string().custom(objectId)),
   }),
 };
 
 const getUsers = {
   query: Joi.object().keys({
-    fullName: Joi.string(),
+    email: Joi.string(),
     role: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -33,11 +43,21 @@ const updateUser = {
   }),
   body: Joi.object()
     .keys({
-      email: Joi.string().email(),
-      password: Joi.string().custom(password),
+      email: Joi.string().custom(email),
       fullName: Joi.string(),
-      roles: Joi.array(),
+      password: Joi.string().custom(password),
       avatar: Joi.string(),
+      gender: Joi.string(),
+      dateOfBirth: Joi.date(),
+      address: Joi.string(),
+      job: Joi.string(),
+      phoneNumber: Joi.string(),
+      cmndNumber: Joi.string(),
+      codeInsurance: Joi.string(),
+      cmndImg: Joi.string(),
+      insuranceImg: Joi.string(),
+      nation: Joi.string(),
+      roles: Joi.array().items(Joi.string().custom(objectId)),
     })
     .min(1),
 };

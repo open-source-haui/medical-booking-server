@@ -4,33 +4,28 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 
 const createDepartment = async (departmentBody) => {
-  const leader = await Doctor.findById(departmentBody.leader);
-  if (!leader) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+  if (departmentBody.leader) {
+    const leader = await Doctor.findById(departmentBody.leader);
+    if (!leader) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ trưởng khoa');
+    }
   }
   return Department.create(departmentBody);
 };
 
 const queryDepartments = async (departmentQuery) => {
-  const filter = pick(departmentQuery, ['name', 'decription']);
+  const filter = pick(departmentQuery, ['name', 'description']);
   const options = pick(departmentQuery, ['sortBy', 'limit', 'page', 'populate']);
   const departments = await Department.paginate(filter, options);
   return departments;
 };
 
 const getDepartmentById = async (departmentId) => {
-  const department = await Department.findById(departmentId);
+  const department = await Department.findById(departmentId).populate('leader');
   if (!department) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Department not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy khoa khám');
   }
   return department;
-};
-
-const getDoctorsByDepartment = async (departmentId) => {
-  const doctors = await Doctor.find({
-    departments: { $in: departmentId },
-  });
-  return doctors;
 };
 
 const updateDepartmentById = async (departmentId, updateBody) => {
@@ -38,7 +33,7 @@ const updateDepartmentById = async (departmentId, updateBody) => {
   if (updateBody.leader) {
     const leader = await Doctor.findById(updateBody.leader);
     if (!leader) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Leader not found');
+      throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy bác sĩ trưởng khoa');
     }
   }
   Object.assign(department, updateBody);
@@ -58,5 +53,4 @@ module.exports = {
   getDepartmentById,
   updateDepartmentById,
   deleteDepartmentById,
-  getDoctorsByDepartment,
 };

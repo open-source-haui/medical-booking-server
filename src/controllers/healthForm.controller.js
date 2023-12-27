@@ -6,32 +6,29 @@ const { healthFormService } = require('../services');
 const createHealthForm = catchAsync(async (req, res) => {
   req.body.user = req.user.id;
   const healthForm = await healthFormService.createHealthForm(req.body);
-  res.status(httpStatus.CREATED).json(response(httpStatus.CREATED, 'HealthForm created successfully', healthForm));
+  res
+    .status(httpStatus.CREATED)
+    .json(response(httpStatus.CREATED, 'Lịch hẹn khám đã được khởi tạo, vui lòng chờ xác nhận', healthForm));
 });
 
 const getHealthForms = catchAsync(async (req, res) => {
   const result = await healthFormService.queryHealthForms(req.query);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', result));
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', result));
 });
 
 const getHealthForm = catchAsync(async (req, res) => {
   const healthForm = await healthFormService.getHealthFormById(req.params.healthFormId);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', healthForm));
 });
 
 const updateHealthForm = catchAsync(async (req, res) => {
   const healthForm = await healthFormService.updateHealthFormById(req.params.healthFormId, req.body);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', healthForm));
 });
 
 const deleteHealthForm = catchAsync(async (req, res) => {
   const healthForm = await healthFormService.deleteHealthFormById(req.params.healthFormId);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
-});
-
-const getMyHealthForms = catchAsync(async (req, res) => {
-  const healthForm = await healthFormService.getMyHealthForms(req.user.id);
-  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Success', healthForm));
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', healthForm));
 });
 
 module.exports = {
@@ -40,5 +37,4 @@ module.exports = {
   getHealthForm,
   updateHealthForm,
   deleteHealthForm,
-  getMyHealthForms,
 };

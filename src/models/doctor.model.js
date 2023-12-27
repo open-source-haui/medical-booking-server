@@ -15,7 +15,8 @@ const doctorSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      default: 'https://th.bing.com/th/id/OIP.gdlq9bpE2CfeazgjCxwvMgAAAA?pid=ImgDet&rs=1',
+      default:
+        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1699383442/medical-booking/image/gxc7kzckxzpzkkoctxr7.jpg',
     },
     degree: {
       type: String,
@@ -26,13 +27,11 @@ const doctorSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    departments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Department',
-        default: [],
-      },
-    ],
+    department: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Department',
+      require: true,
+    },
   },
   { timestamps: true },
 );

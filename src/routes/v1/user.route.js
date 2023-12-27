@@ -7,22 +7,31 @@ const { uploadService } = require('../../services');
 
 const userRouter = express.Router();
 
+userRouter.route('/export').get(userController.exportUsersToExcel);
 userRouter
   .route('/profile')
   .get(auth, validate(userValidation.getUser), userController.getUser)
   .put(
     auth,
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.updateUser),
     userController.updateProfile,
   );
 userRouter
   .route('/')
-  .get(auth, validate(userValidation.getUsers), validate(userValidation.getUser), userController.getUsers)
+  .get(auth, validate(userValidation.getUsers), validate(userValidation.getUsers), userController.getUsers)
   .post(
     auth,
     authorize(['admin']),
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.createUser),
     userController.createUser,
   );
@@ -32,7 +41,11 @@ userRouter
   .put(
     auth,
     authorize(['admin']),
-    uploadService.uploadImage.single('avatar'),
+    uploadService.uploadImage.fields([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'cmndImg', maxCount: 1 },
+      { name: 'insuranceImg', maxCount: 1 },
+    ]),
     validate(userValidation.updateUser),
     userController.updateUser,
   )

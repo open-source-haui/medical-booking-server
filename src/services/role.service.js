@@ -5,7 +5,7 @@ const ApiError = require('../utils/ApiError');
 
 const createRole = async (roleBody) => {
   if (await Role.isRoleTaken(null, roleBody.roleIndex)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Role is already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Vai trò đã tồn tại');
   }
   return Role.create(roleBody);
 };
@@ -24,10 +24,10 @@ const getRoleById = async (id) => {
 const updateRoleById = async (roleId, updateBody) => {
   const role = await getRoleById(roleId);
   if (!role) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Role not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy vai trò');
   }
   if (await Role.isRoleTaken(role.id, updateBody.roleIndex)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Role is already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Vai trò đã tồn tại');
   }
   Object.assign(role, updateBody);
   await role.save();
@@ -37,7 +37,7 @@ const updateRoleById = async (roleId, updateBody) => {
 const deleteRoleById = async (roleId) => {
   const role = await getRoleById(roleId);
   if (!role) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Role not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy vai trò');
   }
   await role.deleteOne();
   return role;
@@ -46,7 +46,7 @@ const deleteRoleById = async (roleId) => {
 const lockRoleById = async (roleId) => {
   const role = await getRoleById(roleId);
   if (!role) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Role not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy vai trò');
   }
   Object.assign(role, { isLocked: !role.isLocked });
   await role.save();

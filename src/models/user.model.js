@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Invalid email address');
+          throw new Error('Địa chỉ email không hợp lệ');
         }
       },
     },
@@ -21,10 +21,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 8,
       validate(value) {
+        if (value.length < 8) {
+          throw new Error('Mật khẩu phải chứa ít nhất 8 ký tự');
+        }
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
+          throw new Error('Mật khẩu phải chứa ít nhất một chữ cái và một số');
         }
       },
       private: true,
@@ -37,7 +39,7 @@ const userSchema = mongoose.Schema(
     avatar: {
       type: String,
       default:
-        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1690136815/Music-Player-App/Default/g9e3aeu3mrnn5l1hu6qh.jpg',
+        'https://res.cloudinary.com/dzlxu2dlv/image/upload/v1699383593/medical-booking/image/sp1cmswjqpwuszoo3bzw.jpg',
     },
     gender: {
       type: String,
@@ -52,11 +54,27 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    job: {
+      type: String,
+      trim: true,
+    },
     phoneNumber: {
       type: String,
       trim: true,
     },
+    cmndNumber: {
+      type: String,
+      trim: true,
+    },
     codeInsurance: {
+      type: String,
+      trim: true,
+    },
+    cmndImg: {
+      type: String,
+      trim: true,
+    },
+    insuranceImg: {
       type: String,
       trim: true,
     },
@@ -79,6 +97,13 @@ const userSchema = mongoose.Schema(
         ref: 'Role',
       },
     ],
+    numberLogined: {
+      type: Number,
+      default: 0,
+    },
+    dateLastLogined: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );

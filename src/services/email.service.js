@@ -14,16 +14,16 @@ const sendEmail = async (to, subject, html) => {
 };
 
 const sendResetPasswordEmail = async (to, token, name) => {
-  const subject = 'Reset password';
-  const resetPasswordUrl = `http://localhost:3000/api/v1/auth/reset-password?token=${token}`;
-  const html = `<p><b style="color:blue">Hello ${name}</b><br><i>To reset your password, click on this link: ${resetPasswordUrl}<br>If you did not request any password resets, then ignore this email.</i></p>`;
+  const subject = 'Đặt lại mật khẩu';
+  const resetPasswordUrl = `${config.base_url}/api/v1/auth/reset-password?token=${token}`;
+  const html = `<p><b style="color:blue">Xin chào ${name}</b><br><i>Để đặt lại mật khẩu của bạn, hãy nhấp vào liên kết sau: ${resetPasswordUrl}<br>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</i></p>`;
   await sendEmail(to, subject, html);
 };
 
 const sendVerificationEmail = async (to, token, name) => {
-  const subject = 'Email Verification';
-  const verificationEmailUrl = `http://localhost:3000/api/v1/auth/verify-email?token=${token}`;
-  const html = `<p><b style="color:blue">Hello ${name}</b><br><i>To verify your email, click on this link: ${verificationEmailUrl}<br>If you did not create an account, then ignore this email.</i></p>`;
+  const subject = 'Xác thực email';
+  const verificationEmailUrl = `${config.base_url}/api/v1/auth/verify-email?token=${token}`;
+  const html = `<p><b style="color:blue">Xin chào ${name}</b><br><i>Để xác minh email của bạn, hãy nhấp vào liên kết sau: ${verificationEmailUrl}<br>Nếu bạn chưa tạo tài khoản, vui lòng bỏ qua email này.</i></p>`;
   await sendEmail(to, subject, html);
 };
 

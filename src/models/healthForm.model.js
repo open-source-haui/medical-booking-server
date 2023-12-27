@@ -8,11 +8,6 @@ const healthFormSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    department: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Department',
-      required: true,
-    },
     doctor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Doctor',
@@ -23,9 +18,17 @@ const healthFormSchema = mongoose.Schema(
       ref: 'WorkingTime',
       required: true,
     },
+    department: {
+      type: String,
+      required: true,
+    },
     numberOrder: {
       type: Number,
       required: true,
+    },
+    numberConfirm: {
+      type: Number,
+      default: 0,
     },
     note: {
       type: String,
@@ -33,7 +36,7 @@ const healthFormSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'accepted', 'rejected', 'cancel'],
+      enum: ['pending', 'accepted', 'rejected'],
       default: 'pending',
     },
   },
