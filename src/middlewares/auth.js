@@ -1,10 +1,11 @@
-const { User, Role, HealthForm } = require('../models');
+const { User, Role } = require('../models');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const { tokenService } = require('../services');
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/ApiError');
+const { logger } = require('./logger');
 
 const auth = catchAsync(async (req, res, next) => {
   const token = tokenService.extractTokenFromHeader(req);
@@ -17,6 +18,7 @@ const auth = catchAsync(async (req, res, next) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Không có quyền');
   }
   req.user = user;
+  await logger(req);
   next();
 });
 

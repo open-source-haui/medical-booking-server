@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
+const cron = require('node-cron');
 const { dataService, userService } = require('./services');
+const { sendLogger } = require('./middlewares/logger');
 
 let server;
 mongoose
@@ -18,6 +20,9 @@ mongoose
   })
   .then(() => {
     return userService.createAdminAccount();
+  })
+  .then(() => {
+    return cron.schedule('*/1 * * * *', sendLogger);
   })
   .catch((error) => {
     logger.error(error);
