@@ -29,6 +29,13 @@ const queryHealthForms = async (healthFormQuery) => {
   if (healthFormQuery.workingTimeId) {
     filter['workingTime'] = healthFormQuery.workingTimeId;
   }
+  if (healthFormQuery.createdAt) {
+    const dateValue = healthFormQuery.createdAt;
+    let dateStart = new Date(dateValue.split('/')[0]);
+    let dateEnd = new Date(dateValue.split('/')[1]);
+    dateEnd.setDate(dateEnd.getDate() + 1);
+    filter['createdAt'] = { $gte: dateStart, $lte: dateEnd };
+  }
   const healthForms = await HealthForm.paginate(filter, options);
   return healthForms;
 };

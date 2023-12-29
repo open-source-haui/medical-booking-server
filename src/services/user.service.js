@@ -25,6 +25,13 @@ const queryUsers = async (userQuery) => {
     const roleIds = roles.map((role) => role._id);
     filter['roles'] = { $in: roleIds };
   }
+  if (userQuery.createdAt) {
+    const dateValue = userQuery.createdAt;
+    let dateStart = new Date(dateValue.split('/')[0]);
+    let dateEnd = new Date(dateValue.split('/')[1]);
+    dateEnd.setDate(dateEnd.getDate() + 1);
+    filter['createdAt'] = { $gte: dateStart, $lte: dateEnd };
+  }
   const users = await User.paginate(filter, options);
   return users;
 };

@@ -7,6 +7,7 @@ const cors = require('cors');
 const httpStatus = require('http-status');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
+const methodOverride = require('method-override');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
@@ -23,6 +24,9 @@ if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
 }
+
+// use method-override
+app.use(methodOverride('LOCK'));
 
 // set security HTTP headers
 app.use(helmet());
