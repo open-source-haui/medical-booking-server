@@ -23,6 +23,7 @@ const getHealthForms = {
     userId: Joi.string().custom(objectId),
     doctorId: Joi.string().custom(objectId),
     workingTimeId: Joi.string().custom(objectId),
+    department: Joi.string(),
     createdAt: Joi.string(),
     sortBy: Joi.string(),
     populate: Joi.string(),
@@ -46,6 +47,7 @@ const updateHealthForm = {
     note: Joi.string(),
     numberOrder: Joi.number(),
     numberConfirm: Joi.number(),
+    deniedReason: Joi.string(),
   }),
 };
 

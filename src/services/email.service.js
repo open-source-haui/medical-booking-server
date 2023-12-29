@@ -27,9 +27,50 @@ const sendVerificationEmail = async (to, token, name) => {
   await sendEmail(to, subject, html);
 };
 
+const sendMsgEmail = async (data) => {
+  const subject = 'Xác nhận lịch hẹn khám';
+  let html;
+  if (!data.deniedReason) {
+    html = `
+    <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #ccc; background-color: yellow; font-family: Arial, sans-serif; padding: 50px; text-align: center;">
+      <tr>
+        <td style="padding: 20px;">
+          <p style="font-size: 18px; margin-bottom: 20px; font-weight: bold">Xin chào ${data.fullName}</p>
+          <p style="font-size: 16px; line-height: 24px; margin-bottom: 20px;">
+            Đơn khám của bạn đã được phê duyệt<br>
+            Thời gian: ${data.time}<br>
+            Phòng khám: ${data.place}<br>
+            Số thứ tự: ${data.stt}<br>
+            Vui lòng đến đúng thời gian đã hẹn!<br>
+          <p style="font-size: 16px; line-height: 24px;">Trân trọng,<br>
+          [Bệnh viện đa khoa Hà Nội]</p>
+        </td>
+      </tr>
+    </table>
+    `;
+  } else {
+    html = `
+    <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #ccc; background-color: yellow; font-family: Arial, sans-serif; padding: 50px; text-align: center;">
+      <tr>
+        <td style="padding: 20px;">
+          <p style="font-size: 18px; margin-bottom: 20px;">Xin chào ${data.fullName}</p>
+          <p style="font-size: 16px; line-height: 24px; margin-bottom: 20px;">
+            Đơn khám của bạn không được chấp nhận<br>
+            Lý do: ${data.deniedReason}<br>
+          <p style="font-size: 16px; line-height: 24px;">Trân trọng,<br>
+          [Bệnh viện đa khoa Hà Nội]</p>
+        </td>
+      </tr>
+    </table>
+    `;
+  }
+  await sendEmail(data.email, subject, html);
+};
+
 module.exports = {
   transport,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
+  sendMsgEmail,
 };

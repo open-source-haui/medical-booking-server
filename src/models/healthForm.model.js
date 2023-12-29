@@ -32,12 +32,21 @@ const healthFormSchema = mongoose.Schema(
     },
     note: {
       type: String,
+      trim: true,
       default: '',
     },
     status: {
       type: String,
       enum: ['pending', 'accepted', 'rejected'],
       default: 'pending',
+    },
+    dateOrder: {
+      type: Date,
+      default: Date.now(),
+    },
+    deniedReason: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true },

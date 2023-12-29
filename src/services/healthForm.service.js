@@ -1,8 +1,9 @@
 const { HealthForm } = require('../models');
-const { workingTimeService, workingPlanService, doctorService, departmentService } = require('./');
+const { workingTimeService, workingPlanService, doctorService, departmentService, emailService } = require('./');
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
+const moment = require('moment');
 
 const createHealthForm = async (healthFormBody) => {
   const wokingTime = await workingTimeService.getWorkingTimeById(healthFormBody.workingTime);
@@ -41,7 +42,14 @@ const queryHealthForms = async (healthFormQuery) => {
 };
 
 const getHealthFormById = async (healthFormId) => {
-  const healthForm = await HealthForm.findById(healthFormId).populate(['user', 'doctor', 'workingTime']);
+  const healthForm = await HealthForm.findById(healthFormId).populate([
+    'user',
+    'doctor',
+    {
+      path: 'workingTime',
+      populate: 'workingPlan',
+    },
+  ]);
   if (!healthForm) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Không tìm thấy lịch hẹn khám');
   }
@@ -67,6 +75,24 @@ const updateHealthFormById = async (healthFormId, updateBody) => {
       healthForm.numberConfirm = healthFormConfirms.length + 1;
       workingTime.registeredQuantity = workingTime.registeredQuantity + 1;
       await workingTime.save();
+      emailService.sendMsgEmail({
+        email: healthForm.user.email,
+        fullName: healthForm.user.fullName,
+        time:
+          healthForm.workingTime.startTime +
+          'h - ' +
+          healthForm.workingTime.endTime +
+          'h ngày ' +
+          moment(healthForm.workingTime.workingPlan.date).format('DD/MM/YYYY'),
+        place: healthForm.workingTime.workingPlan.place,
+        stt: healthFormConfirms.length + 1,
+      });
+    } else {
+      emailService.sendMsgEmail({
+        email: healthForm.user.email,
+        fullName: healthForm.user.fullName,
+        deniedReason: updateBody.deniedReason,
+      });
     }
   } else {
     if (updateBody.status === 'rejected') {
