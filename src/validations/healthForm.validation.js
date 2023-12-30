@@ -24,7 +24,7 @@ const getHealthForms = {
     doctorId: Joi.string().custom(objectId),
     workingTimeId: Joi.string().custom(objectId),
     department: Joi.string(),
-    createdAt: Joi.string(),
+    dateOrder: Joi.string(),
     sortBy: Joi.string(),
     populate: Joi.string(),
     limit: Joi.number().integer(),
@@ -43,11 +43,12 @@ const updateHealthForm = {
     healthFormId: Joi.string().custom(objectId),
   }),
   body: Joi.object().keys({
-    status: Joi.string().valid('pending', 'accepted', 'rejected'),
+    status: Joi.string().valid('pending', 'accepted', 'rejected', 'canceled'),
     note: Joi.string(),
     numberOrder: Joi.number(),
     numberConfirm: Joi.number(),
     deniedReason: Joi.string(),
+    canceledReason: Joi.string(),
   }),
 };
 

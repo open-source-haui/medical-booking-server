@@ -30,12 +30,12 @@ const queryHealthForms = async (healthFormQuery) => {
   if (healthFormQuery.workingTimeId) {
     filter['workingTime'] = healthFormQuery.workingTimeId;
   }
-  if (healthFormQuery.createdAt) {
-    const dateValue = healthFormQuery.createdAt;
+  if (healthFormQuery.dateOrder) {
+    const dateValue = healthFormQuery.dateOrder;
     let dateStart = new Date(dateValue.split('/')[0]);
     let dateEnd = new Date(dateValue.split('/')[1]);
     dateEnd.setDate(dateEnd.getDate() + 1);
-    filter['createdAt'] = { $gte: dateStart, $lte: dateEnd };
+    filter['dateOrder'] = { $gte: dateStart, $lte: dateEnd };
   }
   const healthForms = await HealthForm.paginate(filter, options);
   return healthForms;
@@ -59,11 +59,17 @@ const getHealthFormById = async (healthFormId) => {
 const updateHealthFormById = async (healthFormId, updateBody) => {
   const healthForm = await getHealthFormById(healthFormId);
   if (healthForm.status === 'rejected') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn khám đã bị hủy');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn khám đã bị từ chối');
+  }
+  if (healthForm.status === 'canceled') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn khám đã bị hủy bỏ');
   }
   if (updateBody.status === 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Trạng thái cho phép cập nhật là confirm hoặc reject');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Trạng thái cho phép cập nhật là: accepted, rejected, canceled');
   }
+  const selectedDate = new Date(healthForm.workingTime.workingPlan.date);
+  const currentDate = new Date();
+  const checkAllowCancelled = currentDate < selectedDate;
   const workingTime = await workingTimeService.getWorkingTimeById(healthForm.workingTime);
   if (healthForm.status === 'pending') {
     if (updateBody.status === 'accepted') {
@@ -87,22 +93,33 @@ const updateHealthFormById = async (healthFormId, updateBody) => {
         place: healthForm.workingTime.workingPlan.place,
         stt: healthFormConfirms.length + 1,
       });
-    } else {
+    } else if (updateBody.status === 'rejected') {
+      // pending -> rejected
       emailService.sendMsgEmail({
         email: healthForm.user.email,
         fullName: healthForm.user.fullName,
         deniedReason: updateBody.deniedReason,
       });
+    } else {
+      // pending -> canceled
+      if (!checkAllowCancelled) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Hủy lịch hẹn thất bại, chỉ được phép hủy lịch trước ngày đã hẹn');
+      }
     }
   } else {
-    if (updateBody.status === 'rejected') {
-      // accepted -> rejected
+    if (updateBody.status === 'cancelled') {
+      // accepted -> cancelled
+      if (!checkAllowCancelled) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Hủy lịch hẹn thất bại, chỉ được phép hủy lịch trước ngày đã hẹn');
+      }
       HealthForm.updateMany(
         { wokingTime: healthForm.wokingTime, numberConfirm: { $gt: healthForm.numberConfirm } },
         { $inc: { numberConfirm: -1 } },
       );
       workingTime.registeredQuantity = workingTime.registeredQuantity - 1;
       await workingTime.save();
+    } else {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Lịch hẹn đã accepted, trạng thái cho phép cập nhật là: canceled');
     }
   }
   Object.assign(healthForm, updateBody);

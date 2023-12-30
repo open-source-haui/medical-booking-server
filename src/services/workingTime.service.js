@@ -17,12 +17,13 @@ const queryWorkingTimes = async (workingTimeQuery) => {
   if (workingTimeQuery.workingPlanId) {
     filter['workingPlan'] = workingTimeQuery.workingPlanId;
   }
-  if (workingTimeQuery.doctorId && workingTimeQuery.date) {
-    const workingPlan = await WorkingPlan.findOne({
+  if (workingTimeQuery.doctorId) {
+    const workingPlans = await WorkingPlan.find({
       doctor: workingTimeQuery.doctorId,
-      date: new Date(workingTimeQuery.date),
-    });
-    const workingTimes = await WorkingTime.find({ workingPlan: workingPlan?._id });
+      date: { $gte: new Date() },
+    }).select('_id');
+    const workingPlanIds = workingPlans.map((workingPlan) => workingPlan._id);
+    const workingTimes = await WorkingTime.find({ workingPlan: { $in: workingPlanIds } }).select('_id');
     const workingTimeIds = workingTimes.map((workingTime) => workingTime._id);
     filter['_id'] = { $in: workingTimeIds };
   }

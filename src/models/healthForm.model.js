@@ -37,7 +37,7 @@ const healthFormSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'accepted', 'rejected'],
+      enum: ['pending', 'accepted', 'rejected', 'canceled'],
       default: 'pending',
     },
     dateOrder: {
@@ -45,6 +45,10 @@ const healthFormSchema = mongoose.Schema(
       default: Date.now(),
     },
     deniedReason: {
+      type: String,
+      trim: true,
+    },
+    canceledReason: {
       type: String,
       trim: true,
     },
