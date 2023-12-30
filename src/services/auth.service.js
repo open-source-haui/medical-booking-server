@@ -1,6 +1,8 @@
 const { userService, tokenService } = require('./');
-const { Token } = require('../models');
+const { Token, User } = require('../models');
 const { tokenTypes } = require('../config/tokens');
+const config = require('../config/config');
+const jwt = require('jsonwebtoken');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 
@@ -72,10 +74,20 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+const getUserByToken = async (token) => {
+  const payload = jwt.verify(token, config.jwt.secret);
+  const user = await User.findOne({ _id: payload.sub }).populate('roles');
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Không có quyền');
+  }
+  return user;
+};
+
 module.exports = {
   login,
   logout,
   refreshToken,
   resetPassword,
   verifyEmail,
+  getUserByToken,
 };

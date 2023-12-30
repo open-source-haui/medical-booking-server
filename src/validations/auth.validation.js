@@ -49,6 +49,11 @@ const verifyEmail = {
   }),
 };
 
+const getUserByToken = {
+  body: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+};
 module.exports = {
   register,
   login,
@@ -57,4 +62,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  getUserByToken,
 };

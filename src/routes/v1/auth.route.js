@@ -14,5 +14,6 @@ authRouter.route('/forgot-password').post(validate(authValidation.forgotPassword
 authRouter.route('/reset-password').post(validate(authValidation.resetPassword), authController.resetPassword);
 authRouter.route('/send-verification-email').post(auth, authController.sendVerificationEmail);
 authRouter.route('/verify-email').get(validate(authValidation.verifyEmail), authController.verifyEmail);
+authRouter.route('/token').post(validate(authValidation.getUserByToken), authController.getUserByToken);
 
 module.exports = authRouter;

@@ -55,6 +55,11 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Xác minh email thành công'));
 });
 
+const getUserByToken = catchAsync(async (req, res) => {
+  const user = await authService.getUserByToken(req.body.token);
+  res.status(httpStatus.OK).json({ user });
+});
+
 module.exports = {
   register,
   login,
@@ -64,4 +69,5 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
+  getUserByToken,
 };
