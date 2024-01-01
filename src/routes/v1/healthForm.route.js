@@ -7,8 +7,17 @@ const { healthFormController } = require('../../controllers');
 const healthFormRoute = express.Router();
 
 healthFormRoute
+  .route('/me')
+  .get(auth, validate(healthFormValidation.getHealthForms), healthFormController.getMyHealthForms);
+
+healthFormRoute
   .route('/')
-  .get(auth, validate(healthFormValidation.getHealthForms), healthFormController.getHealthForms)
+  .get(
+    auth,
+    authorize(['nhan-vien-phe-duyet']),
+    validate(healthFormValidation.getHealthForms),
+    healthFormController.getHealthForms,
+  )
   .post(auth, validate(healthFormValidation.createHealthForm), healthFormController.createHealthForm);
 
 healthFormRoute

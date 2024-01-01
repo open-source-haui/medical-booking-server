@@ -16,6 +16,11 @@ const getHealthForms = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', result));
 });
 
+const getMyHealthForms = catchAsync(async (req, res) => {
+  const result = await healthFormService.getMyHealthForms(req.query, req.user.id);
+  res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', result));
+});
+
 const getHealthForm = catchAsync(async (req, res) => {
   const healthForm = await healthFormService.getHealthFormById(req.params.healthFormId);
   res.status(httpStatus.OK).json(response(httpStatus.OK, 'Thành công', healthForm));
@@ -34,6 +39,7 @@ const deleteHealthForm = catchAsync(async (req, res) => {
 module.exports = {
   createHealthForm,
   getHealthForms,
+  getMyHealthForms,
   getHealthForm,
   updateHealthForm,
   deleteHealthForm,

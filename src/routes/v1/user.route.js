@@ -23,7 +23,7 @@ userRouter
   );
 userRouter
   .route('/')
-  .get(auth, validate(userValidation.getUsers), validate(userValidation.getUsers), userController.getUsers)
+  .get(auth, authorize(['admin']), validate(userValidation.getUsers), userController.getUsers)
   .post(
     auth,
     authorize(['admin']),

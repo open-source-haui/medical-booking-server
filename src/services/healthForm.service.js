@@ -41,6 +41,27 @@ const queryHealthForms = async (healthFormQuery) => {
   return healthForms;
 };
 
+const getMyHealthForms = async (healthFormQuery, userId) => {
+  const filter = pick(healthFormQuery, ['department', 'numberOrder', 'numberConfirm', 'note', 'status']);
+  const options = pick(healthFormQuery, ['sortBy', 'limit', 'page', 'populate']);
+  filter['user'] = userId;
+  if (healthFormQuery.doctorId) {
+    filter['doctor'] = healthFormQuery.doctorId;
+  }
+  if (healthFormQuery.workingTimeId) {
+    filter['workingTime'] = healthFormQuery.workingTimeId;
+  }
+  if (healthFormQuery.dateOrder) {
+    const dateValue = healthFormQuery.dateOrder;
+    let dateStart = new Date(dateValue.split('/')[0]);
+    let dateEnd = new Date(dateValue.split('/')[1]);
+    dateEnd.setDate(dateEnd.getDate() + 1);
+    filter['dateOrder'] = { $gte: dateStart, $lte: dateEnd };
+  }
+  const healthForms = await HealthForm.paginate(filter, options);
+  return healthForms;
+};
+
 const getHealthFormById = async (healthFormId) => {
   const healthForm = await HealthForm.findById(healthFormId).populate([
     'user',
@@ -136,6 +157,7 @@ const deleteHealthFormById = async (healthFormId) => {
 module.exports = {
   createHealthForm,
   queryHealthForms,
+  getMyHealthForms,
   getHealthFormById,
   updateHealthFormById,
   deleteHealthFormById,
